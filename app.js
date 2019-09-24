@@ -1,39 +1,32 @@
 //app.js
 App({
-  onLaunch: function () {
-    // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
-
-    // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-      }
-    })
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              // 可以将 res 发送给后台解码出 unionId
-              this.globalData.userInfo = res.userInfo
-
-              // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-              // 所以此处加入 callback 以防止这种情况
-              if (this.userInfoReadyCallback) {
-                this.userInfoReadyCallback(res)
-              }
-            }
-          })
-        }
-      }
-    })
+  globalData: {},
+  onLaunch: function(e) {
+    this.login();
   },
-  globalData: {
-    userInfo: null
+  login: function() {
+    let token = wx.getStorageSync("token") || "";
+    this.globalData.token = token;
+    // 登录接口，获取到 code 存到 data 里面，用于获取到code传递给服务器端
+    if (!token) {
+      // 如果没有登录，获取code 放到  globalData 里面
+      wx.login({
+        success: codeInfo => {
+          console.log(codeInfo);
+          this.globalData.code = codeInfo.code;
+        }
+      });
+    } else {
+      // 如果已经登录了，直接跳转到主页
+      wx.switchTab({
+        url: 'pages/question/list',
+      });
+    }
+  },
+  reLogin: function() {
+    try {
+      wx.removeStorageSync('token');
+      this.login();
+    } catch (e) {}
   }
-})
+});
