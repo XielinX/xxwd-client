@@ -1,31 +1,27 @@
 <!--pages/profile/index.wxml-->
-<text>pages/profile/index.wxml</text>
-<scroll-view scroll-y class="container">
-  <!--社区简介-->
-  <view class="intro">
-    <view>
-      <image class="logo" src="/images/logo.jpg" background-size="cover"></image>
-    </view>
-    <view>
-      <text class="desc">久问问答，免费的技术问答社区，快速提问，快速响应。</text>
-    </view>
+<view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
   </view>
-  <!-- 登录按钮 -->
-  <button class="btn" open-type="getUserInfo"  bindgetuserinfo="getUserInfo" hover-class="btn-click">
-    登录
-  </button>
-
-  <!--社区规则-->
-  <view class="content">
-    <view class="content-title">
-    社区规则
-      <view class="title-icon"/>
-    </view>
-    <view class="content-text">
-      <view>1，久问社区只接受高质量问答，提问和回复前请仔细思考。</view>
-      <view>2，每回答一个问题可以获取1个经验值。</view>
-      <view>3，每通过你分享的链接注册一个新用户，获取5个经验值。</view>
-      <view>4，月度经验值最高的用户可以任选一本100以内的技术书籍，请联系久一索取。</view>
-    </view>
+  <view class="usercity">
+    
+    <text class="user-city">{{userInfo.city}}</text>
   </view>
-</scroll-view>
+  <view class="userprovince">
+    <text class="user-province">{{userInfo.province}}</text>
+  </view>
+  <view class="usercountry">
+    <text class="user-country">{{userInfo.country}}</text>
+  </view>
+  <view class="usergender">
+    <text class="user-gender">{{userInfo.gender}}</text>
+  </view>
+ 
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+</view>
